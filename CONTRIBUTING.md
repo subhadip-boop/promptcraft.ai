@@ -1,131 +1,192 @@
 # Contributing to PromptCraft AI
 
-Thank you for your interest in contributing! Here's how you can help.
+Thank you for your interest in contributing to PromptCraft AI! This document provides guidelines and instructions for contributing.
 
 ## Getting Started
 
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/promptcraft.ai.git`
-3. Create a feature branch: `git checkout -b feature/your-feature-name`
-4. Follow our code standards (see below)
-5. Commit your changes: `git commit -m "feat: add new feature"`
-6. Push to your fork: `git push origin feature/your-feature-name`
-7. Open a Pull Request
+1. **Fork the repository** on GitHub
+2. **Clone your fork** locally
+3. **Create a new branch** for your feature/fix
+4. **Make your changes**
+5. **Submit a pull request**
 
-## Code Standards
+## Development Setup
 
-### TypeScript
-- Use strict mode
-- No `any` types (use `unknown` if needed)
-- Always type function parameters and returns
+```bash
+# Clone repository
+git clone https://github.com/your-username/promptcraft.ai.git
+cd promptcraft.ai
 
-### React Components
-- Use functional components with hooks
-- Keep components under 300 lines
-- Extract logic to custom hooks if needed
-- Use TypeScript interfaces for props
+# Install dependencies
+npm install
 
-```typescript
-interface MyComponentProps {
-  title: string
-  onSubmit: (data: string) => Promise<void>
-  loading?: boolean
-}
+# Setup environment
+cp .env.example .env.local
 
-export default function MyComponent({
-  title,
-  onSubmit,
-  loading = false,
-}: MyComponentProps) {
-  // Component code
-}
+# Start development server
+npm run dev
 ```
 
-### Styling
-- Use Tailwind CSS classes
-- Follow the color palette in BRANDING.md
-- Use the `@apply` directive for custom utilities
+## Code Style
 
-### API Routes
-- Handle all error cases
-- Validate input with Zod
-- Return consistent response format
-- Log errors for debugging
+- Use TypeScript for all new code
+- Follow ESLint configuration
+- Format code with Prettier
+- Use meaningful variable names
+- Add comments for complex logic
 
-```typescript
-export async function POST(request: NextRequest) {
-  try {
-    // Authenticate
-    const { userId } = auth()
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+```bash
+# Format code
+npm run format
 
-    // Validate input
-    const body = await request.json()
-    if (!body.required_field) {
-      return NextResponse.json({ error: 'Missing field' }, { status: 400 })
-    }
-
-    // Process request
-    const result = await doSomething(body)
-
-    return NextResponse.json(result)
-  } catch (error) {
-    console.error('Route error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
-}
+# Lint code
+npm run lint
 ```
 
-## Commit Message Format
+## Commit Messages
 
-Use conventional commits:
+Use clear, descriptive commit messages:
+
 ```
-feat: add new feature
-fix: fix a bug
-docs: update documentation
-style: format code
-refactor: refactor code
-test: add tests
-chore: update dependencies
+✨ feat: Add new feature description
+🐛 fix: Fix bug description
+📝 docs: Documentation update
+🎨 style: Code style changes
+♻️ refactor: Code refactoring
+✅ test: Add or update tests
+⚡ perf: Performance improvements
 ```
 
 ## Pull Request Process
 
-1. Update CHANGELOG.md
-2. Add tests for new features
-3. Update documentation if needed
-4. Ensure all tests pass
-5. Request review from maintainers
+1. **Update documentation** if needed
+2. **Add/update tests** for your changes
+3. **Ensure all tests pass**
+4. **Fill out the PR template**
+5. **Link related issues**
+6. **Request review** from maintainers
+
+## Testing
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
 
 ## Areas for Contribution
 
-- 🐛 Bug fixes
-- ✨ New features
-- 📚 Documentation
-- 🎨 UI/UX improvements
-- ⚡ Performance optimizations
-- 🧪 Tests
+### 🎨 Frontend
+- UI/UX improvements
+- Component optimization
+- Accessibility enhancements
+- Performance optimization
 
-## Feature Ideas
+### ⚙️ Backend
+- API improvements
+- Database optimizations
+- Error handling
+- Rate limiting
 
-- [ ] Batch prompt generation
-- [ ] Prompt versioning
-- [ ] Team collaboration
-- [ ] API for third-party integration
-- [ ] Prompt templates marketplace
-- [ ] Analytics dashboard
-- [ ] Export to PDF
-- [ ] Browser extension
+### 📚 Documentation
+- API documentation
+- Setup guides
+- Troubleshooting guides
+- Code examples
+
+### 🧪 Testing
+- Unit tests
+- Integration tests
+- E2E tests
+- Performance tests
+
+### 🌐 Community
+- Bug reports
+- Feature requests
+- User feedback
+- Community support
+
+## Reporting Bugs
+
+Use GitHub Issues with the following template:
+
+```markdown
+## Description
+Brief description of the bug
+
+## Steps to Reproduce
+1. Step 1
+2. Step 2
+3. Step 3
+
+## Expected Behavior
+What should happen
+
+## Actual Behavior
+What actually happens
+
+## Environment
+- OS: [e.g. macOS 12.0]
+- Browser: [e.g. Chrome 100]
+- Node.js: [e.g. 18.0.0]
+```
+
+## Feature Requests
+
+Use GitHub Issues with:
+
+```markdown
+## Description
+Brief description of the feature
+
+## Why is this needed?
+Explain the use case
+
+## Proposed Solution
+How should this be implemented
+
+## Alternatives Considered
+Other possible approaches
+```
+
+## Code Review Process
+
+1. **Automated Checks**
+   - Tests must pass
+   - Code coverage maintained
+   - Linting passes
+
+2. **Manual Review**
+   - Code quality
+   - Design patterns
+   - Security considerations
+   - Documentation
+
+3. **Approval**
+   - At least 1 maintainer approval
+   - All conversations resolved
+   - Branch up to date with main
+
+## Community Guidelines
+
+- Be respectful and inclusive
+- Follow our Code of Conduct
+- Help others in the community
+- Provide constructive feedback
+- Share knowledge and experience
 
 ## Questions?
 
-- Open a GitHub Discussion
-- Email: dev@promptcraft.ai
-- Discord: [Coming Soon]
+- Check existing issues and discussions
+- Read the documentation
+- Ask in GitHub Discussions
+- Email us at hello@promptcraft.ai
 
-Thanks for contributing! 🙌
+---
+
+Thank you for contributing! 🎉

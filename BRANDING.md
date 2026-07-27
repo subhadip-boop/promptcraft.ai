@@ -1,179 +1,195 @@
-# 🎨 PromptCraft AI - Brand Identity
+# PromptCraft AI - Branding Guidelines
 
-## Brand Name
-**PromptCraft AI** - Where prompts become powerful
+## Brand Overview
 
-## Brand Tagline
-*"Transform simple ideas into expert-level AI prompts"*
+**Mission**: Transform simple ideas into expert-level AI prompts
 
----
+**Vision**: Empower millions to unlock the full potential of AI
 
-## Color Palette
-
-### Primary Colors
-- **Sky Blue**: `#0ea5e9` - Modern, trustworthy, technical
-- **Deep Purple**: `#8b5cf6` - Creative, innovative, premium
-- **Dark Charcoal**: `#111827` - Professional, sleek, sophisticated
-
-### Secondary Colors
-- **Accent Purple**: `#7c3aed`
-- **Light Sky**: `#38bdf8`
-- **Success Green**: `#10b981`
-- **Warning Orange**: `#f59e0b`
-- **Error Red**: `#ef4444`
+**Values**:
+- 💡 Innovation
+- 🤝 Community
+- ✨ Quality
+- 🔒 Trust
 
 ---
 
-## Typography
-
-### Font Family
-- **Headlines**: Inter, -apple-system, BlinkMacSystemFont
-- **Body**: Segoe UI, Roboto, sans-serif
-- **Code**: Fira Code, Courier New, monospace
-
-### Font Sizes
-- **H1**: 48px (Bold) - Headlines
-- **H2**: 36px (Bold) - Subheadings
-- **H3**: 28px (Semi-bold) - Section titles
-- **Body**: 16px (Regular) - Main content
-- **Small**: 14px (Regular) - Secondary text
-
----
-
-## Logo Design
-
-### Logo Concept
-A modern, minimalist design combining:
-- **Prompt symbol**: `>_` (command line bracket)
-- **Sparkle/star**: Representing AI and innovation
-- **Gradient**: Sky blue to purple gradient
-
-### Logo Variations
-1. **Full Logo**: Icon + Text (use for homepage, documentation)
-2. **Icon Only**: Standalone symbol (use for favicon, mobile)
-3. **Horizontal**: Extended version for headers
-4. **Monochrome**: Black/white version for accessibility
+## Logo & Visual Identity
 
 ### Logo Files
-- `logo.svg` - Main logo (scalable)
+- `logo.svg` - Full logo with text
 - `logo-icon.svg` - Icon only
 - `logo-white.svg` - White variant
 - `logo-dark.svg` - Dark variant
+
+### Color Palette
+
+| Color | Hex | RGB | Usage |
+|-------|-----|-----|-------|
+| Primary Blue | #0EA5E9 | 14, 165, 233 | Primary actions, links |
+| Primary Purple | #8B5CF6 | 139, 92, 246 | Accents, gradients |
+| Dark Gray | #1F2937 | 31, 41, 55 | Text, backgrounds |
+| Light Gray | #F3F4F6 | 243, 244, 246 | Backgrounds |
+| Success Green | #10B981 | 16, 185, 129 | Success states |
+| Warning Orange | #F59E0B | 245, 158, 11 | Warnings |
+| Error Red | #EF4444 | 239, 68, 68 | Errors |
+
+### Typography
+
+**Headings**: Inter Bold, 24-48px
+**Body Text**: Inter Regular, 14-16px
+**Code**: JetBrains Mono, 12-14px
 
 ---
 
 ## Brand Voice
 
 ### Tone
-- **Professional yet approachable** - We're experts but not snobby
-- **Empowering** - Help users feel capable
-- **Clear and direct** - No jargon without explanation
-- **Slightly playful** - Inject personality where appropriate
+- Friendly and approachable
+- Professional yet conversational
+- Empowering and inspiring
+- Clear and direct
 
 ### Key Messages
-1. "Everyone can become an AI expert"
-2. "Better prompts = Better AI results"
-3. "Your ideas, supercharged by AI"
-4. "The bridge between human creativity and AI power"
+1. "Transform your ideas into expert prompts"
+2. "Unlock AI potential for everyone"
+3. "Simple, powerful, and intuitive"
+4. "Join thousands of creators"
 
 ---
 
-## Visual Elements
+## Logo Usage
 
-### Icons
-- Use Feather Icons or Heroicons for consistency
-- Custom icons for unique features
-- Always maintain 2px stroke width minimum
+### Do's ✅
+- Use official logo files
+- Maintain clear space around logo
+- Use high-quality versions
+- Scale proportionally
+- Use on contrasting backgrounds
 
-### Imagery
-- Modern, clean, minimalist aesthetic
-- Avoid clichéd tech stock photos
-- Use gradients and geometric shapes
-- Focus on real product screenshots
+### Don'ts ❌
+- Don't modify colors
+- Don't distort or rotate
+- Don't use on similar color backgrounds
+- Don't add effects or shadows
+- Don't use unofficial versions
 
-### Spacing
-- Base unit: 8px
-- Use multiples: 8, 16, 24, 32, 48, 64px
-- Consistent padding and margins throughout
-
----
-
-## UI Components Style
-
-### Buttons
-- **Primary**: Sky blue background, white text
-- **Secondary**: Light gray background, dark text
-- **Accent**: Purple gradient background
-- **Danger**: Red background
-- Rounded corners: 8px
-- Padding: 12px 24px
-
-### Cards
-- Background: White (#ffffff)
-- Border: 1px solid light gray (#e5e7eb)
-- Border-radius: 12px
-- Box shadow: 0 1px 3px rgba(0,0,0,0.1)
-
-### Input Fields
-- Border: 1px solid #d1d5db
-- Focus: 2px solid #0ea5e9
-- Border-radius: 8px
-- Padding: 12px 16px
+### Clear Space
+Minimum 20px clear space around logo on all sides
 
 ---
 
-## Animation Style
+## Social Media
 
-### Principles
-- **Smooth**: Use ease-out timing functions
-- **Fast**: 200-300ms for UI interactions
-- **Purposeful**: Every animation has a reason
-- **Subtle**: Avoid excessive movement
+### Profile Images
+- Logo icon (1:1 square)
+- 512x512px minimum
+- Transparent background preferred
 
-### Common Animations
-- Fade in: 300ms ease-out
-- Slide up: 400ms ease-out
-- Scale: 200ms ease-in-out
-- Pulse: 2s infinite
+### Cover Images
+- 1200x630px (LinkedIn, Facebook)
+- 1500x500px (Twitter)
+- Include brand colors and messaging
 
----
-
-## Marketing Materials
-
-### Color Usage
-- **Website**: 70% white, 20% blue, 10% purple accents
-- **CTAs**: Always use sky blue or purple
-- **Highlights**: Use accent colors sparingly
-
-### Social Media
-- Profile colors: Sky blue primary
-- Cover photo: Gradient (blue to purple)
-- Accent images: Use brand colors in graphics
+### Post Guidelines
+- Use brand colors consistently
+- Include logo in visual content
+- Maintain consistent voice
+- Engage authentically with community
 
 ---
 
-## Accessibility
+## Email Templates
 
-### Color Contrast
-- Minimum ratio: 4.5:1 for text
-- 3:1 for large text (18px+)
-- Always test with accessibility tools
+### Header
+- Logo left-aligned
+- Brand gradient background
+- 600px width maximum
 
-### Readability
-- Line height: 1.5-1.6 for body text
-- Maximum line width: 80 characters
-- Adequate whitespace between elements
+### Colors
+- Primary: #0EA5E9
+- Secondary: #8B5CF6
+- Text: #1F2937
+- Links: #0EA5E9
 
----
-
-## Brand Partners & Third-Party Logos
-
-When featuring partner logos:
-- Use official logo versions
-- Maintain proper spacing around logos
-- Don't modify or recolor partner logos
-- Link to official partner websites
+### Signature
+```
+PromptCraft AI
+Transform Your Ideas Into Expert Prompts
+www.promptcraft.ai
+```
 
 ---
 
-*Brand Guidelines v1.0 - Updated July 2026*
+## Website
+
+### Color Scheme
+- Primary: Blue (#0EA5E9)
+- Secondary: Purple (#8B5CF6)
+- Accent: Green (#10B981)
+- Background: White/Light Gray
+
+### Typography Scale
+- H1: 48px
+- H2: 36px
+- H3: 24px
+- Body: 16px
+- Small: 14px
+
+---
+
+## Collateral
+
+### Business Cards
+- Front: Logo, name, title
+- Back: Contact info, website
+- Materials: Premium cardstock
+- Finish: Matte or gloss
+
+### Letterhead
+- Logo top-left
+- Contact info footer
+- Brand colors in borders
+- Size: Letter (8.5" x 11")
+
+### Presentations
+- Use Figma template
+- Maintain brand colors
+- Include logo on each slide
+- Consistent font usage
+
+---
+
+## Content Guidelines
+
+### Blog Posts
+- Feature image (1200x630px)
+- Author bio with photo
+- Include logo in sidebar
+- Use brand colors for highlights
+
+### Press Releases
+- Boilerplate about company
+- Brand guidelines compliance
+- Logo in header
+- Professional tone
+
+### Ads
+- Headline: 30-50 characters
+- Description: 80-120 characters
+- Include CTA button
+- Brand colors for buttons
+
+---
+
+## Asset Requests
+
+For custom assets:
+- Email: brand@promptcraft.ai
+- Provide: Use case, dimensions, deadline
+- Response time: 3-5 business days
+
+---
+
+*Last Updated: July 2026*
+*For questions: brand@promptcraft.ai*

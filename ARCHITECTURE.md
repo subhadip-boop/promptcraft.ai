@@ -1,291 +1,343 @@
-# PromptCraft AI - Architecture & Code Guide
+# PromptCraft AI - Architecture Guide
 
-## 📂 Project Structure
+## System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Client Layer                            │
+│  (Next.js Frontend - React, Tailwind, Framer Motion)       │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────────────┐
+│                  API Gateway / Edge                         │
+│              (Vercel Edge, CORS, Auth)                      │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────────────┐
+│              Next.js API Routes / Middleware                │
+│  (Authentication, Validation, Rate Limiting, Logging)       │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────────────┐
+│                 Business Logic Layer                        │
+│  (Services, Controllers, Utilities)                         │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+     ┌───────────────────┼───────────────────┐
+     │                   │                   │
+     ▼                   ▼                   ▼
+┌─────────┐      ┌────────────┐      ┌──────────┐
+│Database │      │ Third-party│      │  Cache   │
+│         │      │ Services   │      │  Layer   │
+│(Postgres)│     │(OpenAI,    │      │ (Redis)  │
+│         │      │Stripe)     │      │          │
+└─────────┘      └────────────┘      └──────────┘
+```
+
+## Technology Stack
+
+### Frontend
+- **Framework**: Next.js 14
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **State Management**: Zustand
+- **UI Components**: Custom + Shadcn/ui
+
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Next.js API Routes
+- **Language**: TypeScript
+- **ORM**: Prisma
+- **Database**: PostgreSQL
+- **Authentication**: Clerk
+- **Payments**: Stripe
+
+### Infrastructure
+- **Hosting**: Vercel
+- **Database**: Vercel Postgres / AWS RDS
+- **File Storage**: AWS S3 / Vercel Blob
+- **CDN**: Vercel Edge Network
+- **Monitoring**: Sentry, DataDog
+- **Logging**: Vercel Logs, ELK Stack
+
+### Services
+- **Authentication**: Clerk
+- **Payments**: Stripe
+- **Email**: SendGrid
+- **AI Models**: OpenAI, Anthropic
+- **Analytics**: Mixpanel
+
+## Directory Structure
 
 ```
 productcraft.ai/
-├── app/                          # Next.js app directory
-│   ├── page.tsx                 # Landing page
-│   ├── layout.tsx               # Root layout
-│   ├── globals.css              # Global styles
-│   ├── dashboard/
-│   │   ├── page.tsx             # Dashboard home
-│   │   ├── generator/page.tsx    # Prompt generator
-│   │   ├── library/page.tsx      # Saved prompts library
-│   │   ├── community/page.tsx    # Community showcase
-│   │   └── layout.tsx           # Dashboard layout
-│   ├── sign-in/page.tsx         # Sign in page
-│   ├── sign-up/page.tsx         # Sign up page
-│   ├── pricing/page.tsx         # Pricing page
-│   └── api/                     # API routes
-│       ├── prompts/
-│       │   ├── generate/route.ts # Prompt generation
-│       │   └── save/route.ts     # Save prompts
-│       ├── subscription/
-│       │   └── checkout/route.ts # Stripe checkout
-│       └── webhooks/
-│           └── stripe/route.ts   # Stripe webhooks
-├── components/                   # Reusable React components
-│   ├── landing/
-│   ├── dashboard/
-│   ├── pricing/
-│   └── shared/
-├── lib/                         # Utility functions
-│   ├── db.ts                    # Prisma client
-│   ├── stripe.ts                # Stripe client
-│   └── ai-service.ts            # AI prompt generation
-├── public/                      # Static assets
-│   ├── logo.svg
-│   ├── favicon.ico
-│   └── images/
-├── prisma/
-│   └── schema.prisma            # Database schema
-├── styles/
-│   └── globals.css
-├── .env.example                 # Environment variables template
-├── package.json                 # Dependencies
-├── tsconfig.json                # TypeScript config
-├── tailwind.config.ts           # Tailwind CSS config
-├── next.config.js               # Next.js config
-└── README.md                    # Documentation
+├── app/                          # Next.js 14 app directory
+│   ├── (auth)/                   # Auth group
+│   │   ├── sign-in/              # Sign in page
+│   │   └── sign-up/              # Sign up page
+│   ├── (dashboard)/              # Dashboard group
+│   │   ├── dashboard/            # Main dashboard
+│   │   ├── prompts/              # Prompt management
+│   │   ├── library/              # Saved prompts
+│   │   └── settings/             # User settings
+│   ├── api/                      # API routes
+│   │   ├── auth/                 # Auth endpoints
+│   │   ├── prompts/              # Prompt endpoints
+│   │   ├── users/                # User endpoints
+│   │   └── webhooks/             # Third-party webhooks
+│   ├── admin/                    # Admin panel
+│   ├── layout.tsx                # Root layout
+│   └── page.tsx                  # Home page
+│
+├── components/                   # React components
+│   ├── ui/                       # Reusable UI components
+│   ├── dashboard/                # Dashboard components
+│   ├── forms/                    # Form components
+│   └── layouts/                  # Layout components
+│
+├── lib/                          # Utilities and helpers
+│   ├── auth.ts                   # Auth utilities
+│   ├── db.ts                     # Database client
+│   ├── stripe.ts                 # Stripe utilities
+│   ├── openai.ts                 # OpenAI utilities
+│   └── utils.ts                  # General utilities
+│
+├── hooks/                        # Custom React hooks
+│   ├── useAuth.ts                # Auth hook
+│   ├── usePrompt.ts              # Prompt hook
+│   └── useFetch.ts               # Fetch hook
+│
+├── types/                        # TypeScript types
+│   ├── index.ts                  # Common types
+│   ├── user.ts                   # User types
+│   └── prompt.ts                 # Prompt types
+│
+├── prisma/                       # Database schema
+│   ├── schema.prisma             # Data models
+│   └── migrations/               # Database migrations
+│
+├── public/                       # Static assets
+│   ├── logo.svg                  # Logo files
+│   └── images/                   # Image assets
+│
+├── styles/                       # Global styles
+│   └── globals.css               # Global CSS
+│
+├── .env.example                  # Example environment variables
+├── package.json                  # Dependencies
+├── tsconfig.json                 # TypeScript config
+├── tailwind.config.js            # Tailwind config
+└── next.config.js                # Next.js config
 ```
 
----
+## Data Flow
 
-## 🏗️ Architecture Overview
-
-### Frontend Layer
-- **Framework**: Next.js 14 with React 18
-- **Styling**: Tailwind CSS with custom brand colors
-- **Animations**: Framer Motion for smooth transitions
-- **State Management**: Zustand for global state
-- **UI Components**: Radix UI + Custom components
-
-### Backend Layer
-- **API Routes**: Next.js API Routes (serverless functions)
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Clerk (managed auth service)
-- **Payment**: Stripe (subscription & webhooks)
-- **AI Integration**: OpenAI/Claude API
-
-### Data Flow
+### Prompt Generation Flow
 
 ```
 User Input
     ↓
-Frontend Component (React)
+Validation (Client + Server)
     ↓
-API Route Handler (/api/...)
+Rate Limiting Check
     ↓
-OpenAI/Claude API (Prompt Generation)
+OpenAI/Claude API Call
     ↓
-Database (Prisma/PostgreSQL)
+Response Processing
     ↓
-Response sent back to Frontend
+Database Storage (if authenticated)
     ↓
-Display to User
+Return to User
 ```
 
----
+### User Authentication Flow
 
-## 🔄 Key Features & Implementation
-
-### 1. Prompt Generation Engine
-**File**: `app/api/prompts/generate/route.ts`
-
-```typescript
-// How it works:
-1. User submits: { userInput, platform, tone, format }
-2. System creates optimized prompt based on platform
-3. Calls Claude/GPT with system instructions
-4. Returns transformed prompt
-5. Frontend displays result with copy/save options
+```
+User Login
+    ↓
+Clerk Authentication
+    ↓
+Session Creation
+    ↓
+Middleware Verification
+    ↓
+Access Granted
 ```
 
-### 2. Authentication Flow
-**Provider**: Clerk
+### Payment Flow
 
-```typescript
-// Protected routes use:
-const { userId } = auth()
-if (!userId) return NextResponse.json({ error: 'Unauthorized' })
-
-// Clerk automatically handles:
-// - Sign up/Sign in UI
-// - Session management
-// - User data storage
+```
+Subscribe Button
+    ↓
+Stripe Checkout
+    ↓
+Payment Processing
+    ↓
+Webhook Event
+    ↓
+Subscription Created in DB
+    ↓
+User Access Updated
 ```
 
-### 3. Subscription System
-**Provider**: Stripe
+## Database Schema
 
-```typescript
-// Workflow:
-1. User clicks "Upgrade"
-2. Creates Stripe checkout session
-3. User completes payment
-4. Webhook received at /api/webhooks/stripe
-5. Updates user subscription in database
-6. Features unlocked based on subscription tier
-```
-
-### 4. Database Schema
-**ORM**: Prisma
+### Key Models
 
 ```prisma
-User {
-  - Tracks subscription status
-  - Stores trial end date
-  - Links to Stripe customer
+model User {
+  id String @id
+  email String @unique
+  name String
+  avatar String?
+  plan PlanType
+  credits Int
+  createdAt DateTime
+  updatedAt DateTime
+  prompts Prompt[]
+  likes Like[]
 }
 
-Prompt {
-  - Stores generation history
-  - Links user to their prompts
-  - Tracks metadata (platform, tone, format)
+model Prompt {
+  id String @id
+  userId String
+  user User @relation(fields: [userId])
+  title String
+  description String
+  content String
+  platform String
+  tone String
+  isPublic Boolean
+  views Int
+  likes Like[]
+  createdAt DateTime
+  updatedAt DateTime
 }
 
-SavedPrompt {
-  - User's saved prompt library
-  - Tagging system
-  - Searchable
+model Subscription {
+  id String @id
+  userId String @unique
+  planId String
+  stripeId String
+  status String
+  currentPeriodEnd DateTime
+  createdAt DateTime
+  updatedAt DateTime
 }
+```
 
-CommunityPost {
-  - Public shared prompts
-  - Upvotes/engagement tracking
-  - User attribution
-}
+## API Design
+
+### Endpoint Structure
+
+```
+POST   /api/v1/prompts/generate     - Generate new prompt
+GET    /api/v1/prompts              - List user prompts
+GET    /api/v1/prompts/{id}         - Get specific prompt
+PATCH  /api/v1/prompts/{id}         - Update prompt
+DELETE /api/v1/prompts/{id}         - Delete prompt
+
+GET    /api/v1/users/me             - Get current user
+PATCH  /api/v1/users/me             - Update profile
+GET    /api/v1/users/me/usage       - Get usage stats
+
+POST   /api/v1/subscription/create  - Create subscription
+GET    /api/v1/subscription/status  - Check subscription
+```
+
+## Performance Optimization
+
+### Caching Strategy
+
+1. **Client Caching**
+   - React Query for data fetching
+   - Browser cache for assets
+   - Service Worker for offline
+
+2. **Server Caching**
+   - Redis for session data
+   - Database query caching
+   - API response caching
+
+3. **CDN Caching**
+   - Static assets (images, CSS, JS)
+   - API responses (where applicable)
+   - Edge function results
+
+### Code Optimization
+
+- Code splitting by route
+- Dynamic imports for large components
+- Image optimization with Next.js Image
+- Font optimization
+
+## Security Architecture
+
+### Authentication & Authorization
+- Clerk handles authentication
+- JWT tokens for API requests
+- Role-based access control (RBAC)
+- Session management
+
+### Data Protection
+- HTTPS/TLS for all communications
+- Password hashing with bcrypt
+- Sensitive data encryption at rest
+- Regular security audits
+
+### API Security
+- Rate limiting per user
+- Input validation and sanitization
+- CORS configuration
+- CSRF protection
+- SQL injection prevention (Prisma ORM)
+
+## Monitoring & Logging
+
+### Metrics
+- API response times
+- Error rates
+- Database query performance
+- User engagement metrics
+
+### Logging
+- Error tracking (Sentry)
+- Application logs (Vercel)
+- Database logs
+- Access logs
+
+## Scaling Strategy
+
+### Vertical Scaling
+- Upgrade server resources
+- Optimize database queries
+- Implement caching
+
+### Horizontal Scaling
+- Serverless functions auto-scale
+- Database read replicas
+- Load balancing
+- Multiple deployment regions
+
+## CI/CD Pipeline
+
+```
+Git Push to main
+    ↓
+GitHub Actions Trigger
+    ↓
+Run Tests
+    ↓
+Build Application
+    ↓
+Deploy to Vercel
+    ↓
+Run E2E Tests
+    ↓
+Monitor Deployment
 ```
 
 ---
 
-## 🔌 API Endpoints
-
-### POST `/api/prompts/generate`
-**Generate optimized prompt**
-```bash
-curl -X POST http://localhost:3000/api/prompts/generate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "userInput": "Write an email to my boss",
-    "platform": "chatgpt",
-    "tone": "professional",
-    "format": "markdown"
-  }'
-```
-
-**Response**:
-```json
-{
-  "prompt": "Act as a professional business communication expert...",
-  "platform": "chatgpt",
-  "tone": "professional",
-  "format": "markdown"
-}
-```
-
-### POST `/api/prompts/save`
-**Save prompt to library**
-```bash
-curl -X POST http://localhost:3000/api/prompts/save \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "My Email Template",
-    "prompt": "Act as...",
-    "platform": "chatgpt",
-    "tags": ["email", "business"]
-  }'
-```
-
-### GET `/api/prompts/save`
-**Get user's saved prompts**
-```bash
-curl http://localhost:3000/api/prompts/save
-```
-
-### POST `/api/subscription/checkout`
-**Create Stripe checkout session**
-```bash
-curl -X POST http://localhost:3000/api/subscription/checkout
-```
-
-**Response**:
-```json
-{
-  "sessionId": "cs_live_..."
-}
-```
-
----
-
-## 🎨 Styling System
-
-### Color Palette
-- **Primary Blue**: `#0ea5e9` - Main actions, links
-- **Accent Purple**: `#8b5cf6` - Premium features
-- **Dark**: `#111827` - Text, backgrounds
-- **Success**: `#10b981` - Confirmations
-
-### Component Patterns
-```typescript
-// Button variant
-className={`px-4 py-2 rounded-lg font-bold transition ${
-  isActive ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
-}`}
-
-// Motion animation
-<motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6 }}
->
-  Content
-</motion.div>
-```
-
----
-
-## 🧪 Testing
-
-### Manual Testing Checklist
-- [ ] Sign up creates user in Clerk & database
-- [ ] Prompt generation returns results
-- [ ] Save prompt stores in database
-- [ ] Free trial lasts exactly 30 days
-- [ ] Stripe payment creates subscription
-- [ ] Webhook updates user subscription status
-- [ ] Cancel subscription removes access
-
-### Local Testing
-```bash
-# Test Stripe locally
-stripe listen --forward-to localhost:3000/api/webhooks/stripe
-
-# Simulate payment event
-stripe trigger payment_intent.succeeded
-```
-
----
-
-## 📝 Code Standards
-
-- **Language**: TypeScript (strict mode)
-- **Components**: Functional with hooks
-- **Naming**: camelCase for functions, PascalCase for components
-- **Imports**: Absolute paths with `@/*` alias
-- **Comments**: Add for complex logic, not obvious code
-
----
-
-## 🚀 Performance Optimization
-
-1. **Image Optimization**: Use Next.js `Image` component
-2. **Code Splitting**: Automatic via Next.js
-3. **Caching**: Add `Cache-Control` headers to API responses
-4. **Database Queries**: Use Prisma `select` to fetch only needed fields
-5. **API Routes**: Keep functions under 50ms execution time
-
----
-
-*Documentation v1.0 - Updated July 2026*
+*Last Updated: July 2026*

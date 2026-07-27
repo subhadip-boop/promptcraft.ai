@@ -1,257 +1,219 @@
-# PromptCraft AI - Complete Setup & Deployment Guide
+# PromptCraft AI - Deployment Guide
 
-## 🚀 Quick Start
+## Overview
 
-### Prerequisites
-- Node.js 18+ and npm/yarn
+This guide covers deploying PromptCraft AI to production on Vercel.
+
+## Prerequisites
+
+- Node.js 18+
 - PostgreSQL database
-- Git
+- Vercel account
+- GitHub account
+- Required API keys:
+  - Clerk (authentication)
+  - Stripe (payments)
+  - OpenAI/Claude (AI models)
+  - Email service (SendGrid/Mailgun)
 
-### Installation
+## Deployment Steps
 
-```bash
-# Clone the repository
-git clone https://github.com/subhadip-boop/promptcraft.ai.git
-cd promptcraft.ai
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env.local
-
-# Update .env.local with your API keys
-```
-
-### Environment Variables Setup
-
-**Database:**
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/promptcraft
-```
-
-**Clerk Authentication:**
-1. Go to https://dashboard.clerk.com
-2. Create a new application
-3. Copy your keys:
-   ```
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
-   CLERK_SECRET_KEY=sk_...
-   ```
-
-**OpenAI API:**
-1. Visit https://platform.openai.com/api-keys
-2. Create new API key
-   ```
-   OPENAI_API_KEY=sk-...
-   ```
-
-**Stripe Payment:**
-1. Go to https://dashboard.stripe.com
-2. Get your keys:
-   ```
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_...
-   STRIPE_SECRET_KEY=sk_...
-   STRIPE_WEBHOOK_SECRET=whsec_...
-   ```
-3. Create a price in Stripe:
-   - Product: "Premium Plan"
-   - Price: $30/month (recurring)
-   - Copy Price ID: `price_...`
-   ```
-   NEXT_PUBLIC_PREMIUM_PRICE_ID=price_...
-   ```
-
-### Database Setup
+### 1. Prepare Repository
 
 ```bash
-# Generate Prisma client
-npx prisma generate
+# Ensure main branch is clean
+git status
+git pull origin main
 
-# Create database tables
-npx prisma migrate dev --name init
+# Run tests
+npm run test
 
-# View database UI (optional)
-npx prisma studio
+# Check linting
+npm run lint
 ```
 
-### Local Development
+### 2. Configure Environment Variables
+
+Create production `.env` file:
+
+```env
+# Database
+DATABASE_URL=postgresql://user:password@host:5432/promptcraft_prod
+
+# Authentication (Clerk)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_...
+CLERK_SECRET_KEY=sk_live_...
+CLERK_WEBHOOK_SECRET=whsec_...
+
+# Payments (Stripe)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# AI Models
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Email
+SENDGRID_API_KEY=SG....
+SENDGRID_FROM_EMAIL=noreply@promptcraft.ai
+
+# Application
+NEXT_PUBLIC_APP_URL=https://promptcraft.ai
+NODE_ENV=production
+```
+
+### 3. Database Setup
 
 ```bash
-# Start development server
-npm run dev
+# Run migrations
+npx prisma migrate deploy
 
-# Open http://localhost:3000
+# Verify connection
+npx prisma db execute --stdin < verify.sql
 ```
 
----
+### 4. Deploy to Vercel
 
-## 🌐 Deployment to Production
+#### Option A: Connect GitHub (Recommended)
 
-### Option 1: Deploy to Vercel (Recommended)
+1. Go to [vercel.com](https://vercel.com)
+2. Click "New Project"
+3. Import GitHub repository
+4. Configure project settings:
+   - Framework: Next.js
+   - Build command: `npm run build`
+   - Output directory: `.next`
+5. Add environment variables
+6. Deploy
 
-**Easiest and fastest deployment:**
+#### Option B: Vercel CLI
 
-1. **Push to GitHub**
-   ```bash
-   git push origin main
-   ```
-
-2. **Connect to Vercel**
-   - Go to https://vercel.com/import
-   - Select your repository
-   - Click "Import"
-
-3. **Add Environment Variables**
-   - In Vercel dashboard, go to Settings → Environment Variables
-   - Add all variables from `.env.local`
-
-4. **Deploy**
-   - Click "Deploy"
-   - Wait for build to complete
-   - Your site is live!
-
-### Option 2: Deploy to Railway
-
-1. **Create Railway Account**
-   - Go to https://railway.app
-   - Sign up with GitHub
-
-2. **Create New Project**
-   - Click "Create New"
-   - Select "GitHub Repo"
-   - Choose `promptcraft.ai`
-
-3. **Add PostgreSQL**
-   - Click "Add"
-   - Select "PostgreSQL"
-   - Connect to your app
-
-4. **Set Environment Variables**
-   - Go to your app settings
-   - Add all environment variables
-
-5. **Deploy**
-   - Railway auto-deploys on push
-
-### Option 3: Deploy to Self-Hosted (Docker)
-
-**Dockerfile:**
-```dockerfile
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --production
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-**Docker Compose:**
-```yaml
-version: '3.8'
-services:
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: promptcraft
-      POSTGRES_PASSWORD: secure_password
-      POSTGRES_DB: promptcraft
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      DATABASE_URL: postgresql://promptcraft:secure_password@db:5432/promptcraft
-      # Add other env vars here
-    depends_on:
-      - db
-
-volumes:
-  postgres_data:
-```
-
-Run with: `docker-compose up -d`
-
----
-
-## 🔐 Security Checklist
-
-- [ ] Set `NODE_ENV=production`
-- [ ] Use HTTPS only (enforced by Vercel/Railway)
-- [ ] Enable CORS only for your domain
-- [ ] Rotate API keys regularly
-- [ ] Enable Stripe webhook verification
-- [ ] Set rate limiting on API routes
-- [ ] Enable database backups
-- [ ] Use strong database passwords
-- [ ] Monitor error logs
-
----
-
-## 📊 Database Backups
-
-**Vercel PostgreSQL:**
 ```bash
-# Export database
-pg_dump $DATABASE_URL > backup.sql
+# Install Vercel CLI
+npm i -g vercel
 
-# Restore database
-psql $DATABASE_URL < backup.sql
+# Login
+vercel login
+
+# Deploy to production
+vercel --prod
 ```
 
----
+### 5. Domain Configuration
 
-## 🚨 Troubleshooting
+1. In Vercel dashboard, go to Settings → Domains
+2. Add custom domain: `promptcraft.ai`
+3. Update DNS records:
+   - Type: CNAME
+   - Name: `promptcraft`
+   - Value: `cname.vercel-dns.com`
+4. Wait for DNS propagation (up to 48 hours)
 
-### Stripe webhook not working
-- Ensure webhook URL is: `https://yourdomain.com/api/webhooks/stripe`
-- Verify webhook secret matches `STRIPE_WEBHOOK_SECRET`
-- Check Stripe dashboard for failed events
+### 6. SSL/TLS Certificate
 
-### Database connection issues
-- Verify `DATABASE_URL` format
-- Check PostgreSQL server is running
-- Test connection: `psql $DATABASE_URL`
+- Automatically provided by Vercel
+- HTTPS enabled by default
+- Auto-renewal included
 
-### Clerk authentication failing
-- Ensure Clerk keys are correct
-- Check Clerk dashboard for your application
-- Verify redirect URLs in Clerk settings
+### 7. Monitoring Setup
 
-### OpenAI API errors
-- Confirm API key is valid
-- Check API usage in OpenAI dashboard
-- Ensure you have sufficient credits
+```bash
+# Install Sentry CLI
+npm install --save-dev @sentry/cli
 
----
+# Configure Sentry
+# Set SENTRY_AUTH_TOKEN in env
+```
 
-## 📈 Scaling Tips
+### 8. Health Check
 
-1. **Database**: Use connection pooling with PgBouncer
-2. **Caching**: Add Redis for prompt caching
-3. **CDN**: Enable Vercel Edge Network
-4. **Rate Limiting**: Implement API rate limits
-5. **Analytics**: Use PostHog for user analytics
+```bash
+# Test deployment
+curl https://promptcraft.ai/api/health
 
----
+# Expected response:
+# {"uptime": ..., "message": "OK", "timestamp": ...}
+```
 
-## 📞 Support
+## Post-Deployment
 
-- GitHub Issues: https://github.com/subhadip-boop/promptcraft.ai/issues
-- Email: support@promptcraft.ai
-- Discord: [Coming Soon]
+### Monitoring
+
+1. Check Vercel Analytics
+2. Monitor error rates (Sentry)
+3. Review database performance
+4. Check API response times
+
+### Testing
+
+```bash
+# Test user flow
+1. Sign up with test email
+2. Complete payment with test card: 4242 4242 4242 4242
+3. Generate test prompt
+4. Verify email delivery
+```
+
+### Backup Strategy
+
+```bash
+# Daily backups
+0 2 * * * /home/user/backup.sh >> /var/log/backup.log 2>&1
+
+# Weekly verification
+0 3 * * 0 /home/user/verify_backup.sh
+```
+
+## Rollback Procedure
+
+If issues occur:
+
+```bash
+# 1. Revert to previous deployment
+# In Vercel dashboard: Deployments → Select previous → Promote to Production
+
+# 2. Or revert git commit
+git revert <commit-hash>
+git push origin main
+
+# 3. Database rollback
+npx prisma migrate resolve --rolled-back <migration-name>
+```
+
+## Scaling
+
+### Database
+- Start: Shared PostgreSQL (Vercel Postgres)
+- Scale: Managed PostgreSQL (AWS RDS, Render)
+- Read replicas for high traffic
+
+### Application
+- Auto-scaling enabled on Vercel
+- Serverless functions scale automatically
+- Edge caching for static content
+
+### Storage
+- Use S3 for file uploads
+- CloudFront CDN for distribution
+- Cache static assets
+
+## Security Checklist
+
+- [ ] Enable HSTS
+- [ ] Configure CORS properly
+- [ ] Set CSP headers
+- [ ] Enable rate limiting
+- [ ] Rotate API keys
+- [ ] Enable 2FA on all accounts
+- [ ] Regular security audits
+- [ ] Backup encryption
+
+## Support
+
+- **Vercel Support**: https://vercel.com/support
+- **Docs**: https://vercel.com/docs
+- **Status**: https://www.vercel-status.com
 
 ---
 

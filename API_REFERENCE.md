@@ -1,98 +1,216 @@
-# API Rate Limits & Best Practices
+# PromptCraft AI - API Reference
+
+## Overview
+
+The PromptCraft AI API provides programmatic access to prompt generation, management, and community features.
+
+**Base URL**: `https://api.promptcraft.ai/v1`
+
+## Authentication
+
+All API requests require authentication using a Bearer token:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.promptcraft.ai/v1/prompts
+```
 
 ## Rate Limiting
 
-### Free Tier
-- 100 requests per day
-- 5 requests per minute
-- 1MB response size
+- Free tier: 100 requests/hour
+- Premium tier: 10,000 requests/hour
+- Enterprise: Custom limits
 
-### Premium Tier
-- Unlimited requests
-- Priority processing
-- 10MB response size
+## Endpoints
+
+### Prompts
+
+#### Generate Prompt
+```
+POST /prompts/generate
+```
+
+**Request**:
+```json
+{
+  "description": "A prompt for ChatGPT to write a blog post",
+  "platform": "chatgpt",
+  "tone": "professional",
+  "length": "medium"
+}
+```
+
+**Response**:
+```json
+{
+  "id": "prompt_123",
+  "content": "You are a professional blog writer...",
+  "platform": "chatgpt",
+  "tone": "professional",
+  "created_at": "2026-07-27T10:30:00Z"
+}
+```
+
+#### List Prompts
+```
+GET /prompts
+```
+
+**Query Parameters**:
+- `limit` (integer, default: 20)
+- `offset` (integer, default: 0)
+- `platform` (string, optional)
+- `search` (string, optional)
+
+#### Get Prompt
+```
+GET /prompts/{id}
+```
+
+#### Update Prompt
+```
+PATCH /prompts/{id}
+```
+
+#### Delete Prompt
+```
+DELETE /prompts/{id}
+```
+
+### Users
+
+#### Get Current User
+```
+GET /users/me
+```
+
+#### Update Profile
+```
+PATCH /users/me
+```
+
+#### Get Usage
+```
+GET /users/me/usage
+```
+
+### Subscription
+
+#### Get Plan
+```
+GET /subscription/plan
+```
+
+#### List Plans
+```
+GET /subscription/plans
+```
+
+#### Create Subscription
+```
+POST /subscription/subscribe
+```
+
+### Community
+
+#### List Featured Prompts
+```
+GET /community/featured
+```
+
+#### Search Prompts
+```
+GET /community/search?q=query
+```
+
+#### Like Prompt
+```
+POST /community/prompts/{id}/like
+```
 
 ## Error Handling
 
-All API responses follow this format:
+Errors are returned with appropriate HTTP status codes:
 
-### Success Response
 ```json
 {
-  "success": true,
-  "data": { ... },
-  "timestamp": "2026-07-27T22:00:00Z"
-}
-```
-
-### Error Response
-```json
-{
-  "success": false,
-  "error": "Error description",
-  "code": "ERROR_CODE",
-  "timestamp": "2026-07-27T22:00:00Z"
-}
-```
-
-## HTTP Status Codes
-
-- `200 OK` - Request successful
-- `201 Created` - Resource created
-- `400 Bad Request` - Invalid input
-- `401 Unauthorized` - Authentication required
-- `403 Forbidden` - Insufficient permissions
-- `404 Not Found` - Resource not found
-- `429 Too Many Requests` - Rate limit exceeded
-- `500 Server Error` - Internal error
-
-## Common Error Codes
-
-- `INVALID_INPUT` - Request validation failed
-- `UNAUTHORIZED` - User not authenticated
-- `FORBIDDEN` - User lacks permissions
-- `NOT_FOUND` - Resource not found
-- `RATE_LIMIT` - Rate limit exceeded
-- `INTERNAL_ERROR` - Server error
-- `AI_ERROR` - AI model error
-- `PAYMENT_ERROR` - Payment processing error
-
-## Best Practices
-
-1. **Always handle errors** - Use try/catch in client code
-2. **Cache responses** - Use browser cache for read operations
-3. **Validate input** - Send valid data to APIs
-4. **Retry logic** - Implement exponential backoff for failed requests
-5. **Monitor usage** - Track API calls to stay within limits
-
-## Example Error Handling
-
-```typescript
-try {
-  const response = await fetch('/api/prompts/generate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      userInput: 'Write an email',
-      platform: 'chatgpt',
-      tone: 'professional',
-      format: 'markdown',
-    }),
-  })
-
-  if (!response.ok) {
-    const error = await response.json()
-    if (error.code === 'RATE_LIMIT') {
-      // Handle rate limit
-      console.error('Rate limited. Please try again later.')
-    }
-    throw new Error(error.error)
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "Description is required",
+    "details": {}
   }
-
-  const data = await response.json()
-  return data.prompt
-} catch (error) {
-  console.error('API Error:', error)
-  // Show user-friendly error message
 }
 ```
+
+### Error Codes
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `429` - Too Many Requests
+- `500` - Internal Server Error
+
+## Examples
+
+### JavaScript
+```javascript
+const response = await fetch('https://api.promptcraft.ai/v1/prompts/generate', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    description: 'Write a blog post',
+    platform: 'chatgpt'
+  })
+});
+
+const prompt = await response.json();
+```
+
+### Python
+```python
+import requests
+
+response = requests.post(
+    'https://api.promptcraft.ai/v1/prompts/generate',
+    headers={
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'description': 'Write a blog post',
+        'platform': 'chatgpt'
+    }
+)
+
+prompt = response.json()
+```
+
+### cURL
+```bash
+curl -X POST https://api.promptcraft.ai/v1/prompts/generate \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Write a blog post",
+    "platform": "chatgpt"
+  }'
+```
+
+## Webhook Events
+
+### Events
+- `prompt.created` - Prompt created
+- `subscription.started` - Subscription activated
+- `subscription.ended` - Subscription cancelled
+- `payment.completed` - Payment processed
+- `payment.failed` - Payment failed
+
+## Support
+
+- Email: api-support@promptcraft.ai
+- Docs: https://docs.promptcraft.ai
+- Status: https://status.promptcraft.ai
+
