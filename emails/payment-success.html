@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9fafb;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .header {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 8px 8px 0 0;
+      margin: -20px -20px 20px -20px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+    .content {
+      padding: 20px 0;
+    }
+    .button {
+      display: inline-block;
+      background-color: #0ea5e9;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .footer {
+      background-color: #f3f4f6;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      border-radius: 0 0 8px 8px;
+      margin: 20px -20px -20px -20px;
+    }
+    .success-box {
+      background-color: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✅ Payment Successful!</h1>
+    </div>
+    
+    <div class="content">
+      <h2>Welcome to Premium, {{USER_NAME}}!</h2>
+      <p>Thank you for upgrading to PromptCraft Premium. Your subscription is now active.</p>
+      
+      <div class="success-box">
+        <strong>✓ Subscription Active</strong><br>
+        Your premium features are unlocked and ready to use.
+      </div>
+      
+      <h3>What's Included:</h3>
+      <ul>
+        <li>✨ Unlimited prompt generation</li>
+        <li>🚀 Advanced AI models (GPT-4, Claude 3)</li>
+        <li>⚡ Priority email support</li>
+        <li>🔌 API access (coming soon)</li>
+        <li>👥 Team collaboration features</li>
+        <li>📊 Advanced analytics & insights</li>
+        <li>📥 Export & batch operations</li>
+      </ul>
+      
+      <h3>Billing Details:</h3>
+      <p>
+        <strong>Plan:</strong> Premium<br>
+        <strong>Amount:</strong> $30.00/month<br>
+        <strong>Next Billing Date:</strong> {{NEXT_BILLING_DATE}}<br>
+        <strong>Receipt:</strong> <a href="{{RECEIPT_URL}}">Download Invoice</a>
+      </p>
+      
+      <p><a href="{{APP_URL}}/dashboard" class="button">Go to Dashboard →</a></p>
+      
+      <p>You can manage your subscription anytime from your account settings.</p>
+    </div>
+    
+    <div class="footer">
+      <p>&copy; 2026 PromptCraft AI. All rights reserved.</p>
+      <p>Questions? support@promptcraft.ai</p>
+    </div>
+  </div>
+</body>
+</html>
